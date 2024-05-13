@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seletor de Texto</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 10vh;
+        background-color: #f9f9f900;
+    }
+
+    .area-texto {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    min-width: 150px;
+    width: auto;
+    min-height: 50px;
+    height: auto;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: white;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.area-texto img {
+    max-width: 50px; /* Tamanho máximo da imagem */
+    height: auto;
+    margin-right: 10px; /* Espaço entre a imagem e o texto */
+}
+
+.area-texto span {
+    display: inline-block; /* Para garantir que o texto não quebre a linha */
+}
+
+
+    .seletor-cor {
+        margin-top: 10px;
+    }
+
+    .personagem {
+        display: inline-block; 
+        left: 0;
+        top: 0;
+        margin-right: 5px;
+        margin-left: 5px;
+        min-width: 50px; /* Tamanho ajustável conforme necessário */
+        min-height: 50px; /* Tamanho ajustável conforme necessário */
+        width: auto;
+        height: auto;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #texto {
+        display: inline-block;
+        text-align: center;
+        padding: 8px;
+        margin-right: 8px;
+        background-color: white;
+        border-radius: 10px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+
+@keyframes dropDown {
+    from {
+        transform: translateY(-50px); /* Começa acima da posição normal */
+        opacity: 0; /* Começa invisível */
+    }
+    to {
+        transform: translateY(0); /* Move para baixo para a posição normal */
+        opacity: 1; /* Torna visível */
+    }
+}
+
+.botoes-personagens button {
+    margin-right: 10px;
+    padding: 5px; /* Espaçamento interno */
+    border: none; /* Remover a borda padrão */
+    background-color: transparent; /* Fundo transparente */
+    border: solid black 1px;
+    border-radius: 8px;
+    margin-top: 10px;
+    animation: dropDown 0.5s ease-in-out forwards; /* Aplica a animação aos botões */
+}
+
+    .botoes-personagens button:hover {
+        transform: scale(0.7); /* Aumenta o tamanho ao passar o mouse */
+    }
+
+    .botoes-personagens button img {
+        max-width: 70px; /* Tamanho máximo da imagem */
+        height: auto; /* Altura automática */
+    }
+    @keyframes dropDown {
+    from {
+        transform: translateY(-50px); /* Começa acima da posição normal */
+        opacity: 0; /* Começa invisível */
+    }
+    to {
+        transform: translateY(0); /* Move para baixo para a posição normal */
+        opacity: 1; /* Torna visível */
+    }
+}
+
+.seletor-cor {
+    margin-top: 10px;
+    animation: dropDown 0.5s ease-in-out forwards; /* Aplica a animação ao campo */
+}
+
+
+</style>
+</head>
+<body>
+<div class="container">
+    <label for="campo-texto">Digite algo:</label>
+    <input type="text" id="campo-texto" oninput="mostrarTexto(this.value)" placeholder="Digite aqui">
+
+    <label for="tamanho-texto">Tamanho do Texto (em px):</label>
+    <input type="number" id="tamanho-texto" oninput="alterarTamanho(this.value)" placeholder="Digite o tamanho em px">
+
+    <label for="fonte-texto">Fonte do Texto:</label>
+    <select id="fonte-texto" onchange="alterarFonte(this.value)">
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Helvetica, sans-serif">Helvetica</option>
+        <option value="Times New Roman, serif">Times New Roman</option>
+        <!-- Adicione outras fontes disponíveis no WordPress conforme necessário -->
+    </select>
+
+    <label for="estilo-texto">Estilo do Texto:</label>
+    <select id="estilo-texto" onchange="alterarEstilo(this.value)">
+        <option value="normal">Normal</option>
+        <option value="bold">Negrito</option>
+        <option value="italic">Itálico</option>
+        <option value="underline">Sublinhado</option>
+    </select>
+
+    <label for="escolha">Escolha entre tema e cor:</label>
+    <select id="escolha" onchange="alterarEscolha(this.value)">
+        <option value="tema">Tema (imagem de fundo)</option>
+        <option value="cor">Cor (borda colorida)</option>
+    </select>
+    
+       <div class="seletor-cor" id="seletor-cor-div" style="display: none;">
+        <label for="cor-fundo">Selecione a cor de fundo:</label>
+        <select id="cor-fundo" onchange="alterarCorFundo(this.value)">
+            <option value="#FFFFFF">Selecione</option>
+            <option value="#fce98a">Amarelo</option>
+            <option value="#98d1a5">Verde</option>
+            <option value="#f6d498">Cor de pele</option>
+            <option value="#f4d9e9">Lilás</option>
+            <option value="#5acaed">Azul</option>
+            <option value="#354d97">Azul Escuro</option>
+        </select>
+    </div> 
+
+    <label for="categoria">Categoria:</label>
+    <select id="categoria" onchange="mostrarPersonagens(this.value)">
+        <option value="">Selecione uma categoria</option>
+        <option value="astronautas" >Astronautas</option>
+        <option value="naves">Naves Espaciais</option>
+        <option value="princesas">Princesas</option>
+        <option value="unicornios">Unicórnios</option>
+    </select>
+
+    <!-- a div abaixo é a área de texto do live preview-->
+
+    <div class="area-texto">
+        <div class="personagem"></div>
+        <div id="texto"></div>
+    </div>
+
+
+<div id="botoes-personagens" class="botoes-personagens"></div>
+
+<script>
+function mostrarTexto(texto) {
+    const areaTexto = document.querySelector('.area-texto');
+    const textoElement = document.getElementById('texto');
+
+    if (areaTexto && textoElement) {
+        textoElement.textContent = texto;
+        ajustarTamanhoPersonagem(); // Chamando a função para ajustar o tamanho do personagem
+    }
+}
+
+
+function alterarTamanho(tamanho) {
+    const areaTexto = document.querySelector('.area-texto');
+
+    if (areaTexto) {
+        areaTexto.style.fontSize = tamanho + 'px';
+    }
+}
+
+function alterarFonte(fonte) {
+    const areaTexto = document.querySelector('.area-texto');
+
+    if (areaTexto) {
+        areaTexto.style.fontFamily = fonte;
+    }
+}
+
+function alterarEstilo(estilo) {
+    const areaTexto = document.querySelector('.area-texto');
+
+    if (areaTexto) {
+        areaTexto.style.fontWeight = estilo === 'bold' ? 'bold' : 'normal';
+        areaTexto.style.fontStyle = estilo === 'italic' ? 'italic' : 'normal';
+        areaTexto.style.textDecoration = estilo === 'underline' ? 'underline' : 'none';
+    }
+}
+
+function alterarEscolha(escolha) {
+    const areaTexto = document.querySelector('.area-texto');
+
+    if (areaTexto) {
+        if (escolha === 'tema') {
+            areaTexto.style.backgroundImage = "url('URL_DO_TEMA')";
+            areaTexto.style.backgroundSize = 'cover';
+            areaTexto.style.borderRadius = '10px'; // Arredondamento da borda
+            areaTexto.style.padding = '10px'; // Espaço interno do texto
+        } else if (escolha === 'cor') {
+            areaTexto.style.backgroundImage = 'none'; // Remove a imagem de fundo
+            areaTexto.style.backgroundColor = 'COR_ESCOLHIDA'; // Cor de fundo
+            areaTexto.style.borderRadius = '10px'; // Arredondamento da borda
+            areaTexto.style.padding = '10px'; // Espaço interno do texto
+        }
+    }
+}
+
+function alterarPersonagem(personagem) {
+    const areaTexto = document.querySelector('.area-texto');
+    const personagemElement = document.querySelector('.personagem');
+
+    if (areaTexto && personagemElement && personagem) {
+        areaTexto.style.backgroundImage = 'none'; // Remove a imagem de fundo do tema ou cor
+        personagemElement.style.backgroundImage = `url('${personagem}')`;
+    }
+}
+
+function alterarCorFundo(cor) {
+    const areaTexto = document.querySelector('.area-texto');
+    const escolhaSelect = document.getElementById('escolha');
+
+    if (areaTexto && escolhaSelect) {
+        if (escolhaSelect.value === 'cor') {
+            areaTexto.style.backgroundColor = cor;
+        }
+    }
+}
+
+function alterarEscolha(escolha) {
+    const seletorCorDiv = document.getElementById('seletor-cor-div');
+
+    if (seletorCorDiv) {
+        if (escolha === 'cor') {
+            seletorCorDiv.style.display = 'block';
+        } else {
+            seletorCorDiv.style.display = 'none';
+        }
+    }
+}
+
+function ajustarTamanhoPersonagem() {
+    const textoElement = document.getElementById('texto');
+    const personagemElement = document.querySelector('.personagem');
+
+    if (textoElement && personagemElement) {
+        const tamanhoTexto = parseFloat(getComputedStyle(textoElement).fontSize);
+        const tamanhoMinimo = 50; // Tamanho mínimo para o personagem
+        const tamanhoMaximo = 100; // Tamanho máximo para o personagem
+
+        if (tamanhoTexto > tamanhoMinimo && tamanhoTexto <= tamanhoMaximo) {
+            personagemElement.style.width = tamanhoTexto + 'px';
+            personagemElement.style.height = tamanhoTexto + 'px';
+        } else if (tamanhoTexto > tamanhoMaximo) {
+            personagemElement.style.width = tamanhoMaximo + 'px';
+            personagemElement.style.height = tamanhoMaximo + 'px';
+        } else {
+            personagemElement.style.width = tamanhoMinimo + 'px';
+            personagemElement.style.height = tamanhoMinimo + 'px';
+        }
+    }
+}
+
+function mostrarPersonagens(categoria) {
+    const botoesPersonagens = document.getElementById('botoes-personagens');
+
+    // Limpar botões existentes
+    botoesPersonagens.innerHTML = '';
+
+    if (categoria === '') {
+        // Mostrar todos os personagens
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/1.png', 'Astronauta 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/2.png', 'Astronauta 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/3.png', 'Astronauta 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/4.png', 'Astronauta 4');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/5.png', 'Nave Espacial 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/6.png', 'Nave Espacial 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/7.png', 'Nave Espacial 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/8.png', 'Nave Espacial 4');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/1-1.png', 'Princesa 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/2-1.png', 'Princesa 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/3-1.png', 'Princesa 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/4-1.png', 'Princesa 4');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/5-1.png', 'Unicórnio 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/6-1.png', 'Unicórnio 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/7-1.png', 'Unicórnio 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/8-1.png', 'Unicórnio 4');
+    } else if (categoria === 'astronautas') {
+        // Mostrar apenas os astronautas
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/1.png', 'Astronauta 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/2.png', 'Astronauta 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/3.png', 'Astronauta 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/4.png', 'Astronauta 4');
+    } else if (categoria === 'naves') {
+        // Mostrar apenas as naves espaciais
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/6.png', 'Nave Espacial 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/7.png', 'Nave Espacial 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/8.png', 'Nave Espacial 4');
+    } else if (categoria === 'princesas') {
+        // Mostrar apenas as princesas
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/1-1.png', 'Princesa 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/2-1.png', 'Princesa 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/3-1.png', 'Princesa 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/4-1.png', 'Princesa 4');
+    } else if (categoria === 'unicornios') {
+        // Mostrar apenas os unicórnios
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/5-1.png', 'Unicórnio 1');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/6-1.png', 'Unicórnio 2');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/7-1.png', 'Unicórnio 3');
+        adicionarBotao('https://iventakids.com.br/wp-content/uploads/2024/05/8-1.png', 'Unicórnio 4');
+    }
+}
+
+function adicionarBotao(imagemUrl, altText) {
+    const botoesPersonagens = document.getElementById('botoes-personagens');
+    const botao = document.createElement('button');
+    const imagem = document.createElement('img');
+
+    imagem.src = imagemUrl;
+    imagem.alt = altText;
+    botao.appendChild(imagem);
+    botoesPersonagens.appendChild(botao);
+
+    botao.onclick = function() {
+        alterarPersonagem(imagemUrl);
+    };
+}
+
+</script>
+</body>
+</html>
